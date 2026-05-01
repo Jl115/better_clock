@@ -12,18 +12,22 @@ This file documents the high-level structure of the application.
 ```
 lib/
 ├── main.dart                          # Entry point, initializes services, MaterialApp.router
-├── router.dart                        # go_router with ShellRoute + NavigationBar
+├── router.dart                        # Backward-compat export; routing lives in core/navigation/
 ├── core/
+│   ├── navigation/
+│   │   ├── app_tab.dart              # Enum for bottom-tab destinations
+│   │   ├── shell_navigator.dart    # ScaffoldWithNavBar (theme + tab switching)
+│   │   └── router_config.dart      # GoRouter composer (top-level redirects/deep-links)
 │   ├── di/
-│   │   └── injection.dart              # get_it registrations for services, DB, repos, usecases
+│   │   └── injection.dart          # get_it registrations for services, DB, repos, usecases
 │   ├── data/
 │   │   └── local/
-│   │       ├── app_database.dart     # Floor abstract DB (uses package: imports for cross-feature)
-│   │       └── app_database.g.dart   # Generated Floor code
+│   │       ├── app_database.dart   # Floor abstract DB (uses package: imports for cross-feature)
+│   │       └── app_database.g.dart # Generated Floor code
 │   ├── services/
 │   │   ├── audio_service.dart         # Placeholder for audioplayers
 │   │   ├── notification_service.dart  # Placeholder for flutter_local_notifications
-│   │   ├── permission_service.tsx    # Permission handler wrapper
+│   │   ├── permission_service.dart    # Permission handler wrapper
 │   │   └── time_ticker_service.dart   # Broadcasts DateTime every 10ms
 │   ├── theme/
 │   │   ├── catppuccin_colors.dart    # Catppuccin Mocha + Latte palette constants
@@ -38,8 +42,10 @@ lib/
 │   │   │   └── models/
 │   │   │       └── alarm_entity.dart  # Floor entity for alarms
 │   │   └── presentation/
-│   │       └── pages/
-│   │           └── alarm_list_page.dart
+│   │       ├── pages/
+│   │       │   └── alarm_list_page.dart
+│   │       └── routes/
+│   │           └── alarm_routes.dart   # Feature's GoRoute definitions
 │   ├── customization/
 │   │   ├── data/
 │   │   │   ├── dao/
@@ -56,8 +62,10 @@ lib/
 │   │   │   └── usecases/
 │   │   │       └── customization_usecases.dart
 │   │   └── presentation/
-│   │       └── pages/
-│   │           └── customization_page.dart
+│   │       ├── pages/
+│   │       │   └── customization_page.dart
+│   │       └── routes/
+│   │           └── customization_routes.dart   # Feature's GoRoute definitions
 │   └── stopwatch/
 │       ├── data/
 │       │   ├── dao/
@@ -84,6 +92,8 @@ lib/
 │           │   └── stopwatch_state.dart
 │           ├── pages/
 │           │   └── stopwatch_page.dart
+│           ├── routes/
+│           │   └── stopwatch_routes.dart   # Feature's GoRoute + BlocProvider injection
 │           └── widgets/
 │               ├── stopwatch_controls.dart
 │               └── stopwatch_lap_list.dart
@@ -93,6 +103,7 @@ test/
 
 ## Key Modules & Responsibilities
 
+- **`core/navigation/`** — `go_router` configuration: `AppTab` enum, `ShellNavigator`, `router_config.dart`. Deep-links and redirects wired here in Phase 4.
 - **`core/services/`** — Cross-cutting singletons: TimeTicker, Audio, Notifications, Permissions.
 - **`core/data/local/`** — Shared local DB abstraction: `AppDatabase`, `app_database.g.dart`. **Does not contain feature entities or DAOs.**
 - **`core/di/`** — The single source of truth for `get_it` registrations.

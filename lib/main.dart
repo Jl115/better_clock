@@ -30,7 +30,7 @@ class BetterClockApp extends StatelessWidget {
       title: 'Better Clock',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.mocha,
-      routerConfig: router,
+      routerConfig: appRouter,
     );
   }
 }

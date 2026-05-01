@@ -5,14 +5,18 @@
 ```
 lib/
 ├── main.dart
-├── router.dart
+├── router.dart                        # Backward-compat export; routing lives in core/navigation/
 ├── core/
+│   ├── navigation/
+│   │   ├── app_tab.dart              # Enum for bottom-tab destinations
+│   │   ├── shell_navigator.dart    # ScaffoldWithNavBar (theme + tab switching)
+│   │   └── router_config.dart      # GoRouter composer (top-level redirects/deep-links)
 │   ├── di/
-│   │   └── injection.dart              # get_it registrations
+│   │   └── injection.dart            # get_it registrations
 │   ├── data/
 │   │   └── local/
-│   │       ├── app_database.dart       # Floor abstract DB (cross-feature via package: imports)
-│   │       └── app_database.g.dart     # Generated Floor code
+│   │       ├── app_database.dart   # Floor abstract DB (cross-feature via package: imports)
+│   │       └── app_database.g.dart   # Generated Floor code
 │   ├── services/
 │   │   ├── audio_service.dart
 │   │   ├── notification_service.dart
@@ -31,8 +35,10 @@ lib/
 │   │   │   └── models/
 │   │   │       └── alarm_entity.dart
 │   │   └── presentation/
-│   │       └── pages/
-│   │           └── alarm_list_page.dart
+│   │       ├── pages/
+│   │       │   └── alarm_list_page.dart
+│   │       └── routes/
+│   │           └── alarm_routes.dart   # Feature's GoRoute definitions
 │   ├── customization/
 │   │   ├── data/
 │   │   │   ├── dao/
@@ -49,8 +55,10 @@ lib/
 │   │   │   └── usecases/
 │   │   │       └── customization_usecases.dart
 │   │   └── presentation/
-│   │       └── pages/
-│   │           └── customization_page.dart
+│   │       ├── pages/
+│   │       │   └── customization_page.dart
+│   │       └── routes/
+│   │           └── customization_routes.dart   # Feature's GoRoute definitions
 │   └── stopwatch/
 │       ├── data/
 │       │   ├── dao/
@@ -58,14 +66,14 @@ lib/
 │       │   ├── datasources/
 │       │   │   └── stopwatch_local_datasource.dart
 │       │   ├── models/
-│       │   │   └── stopwatch_entity.dart
+│       │   │   └── stopwatch_entity.dart   # StopwatchSessionEntity, LapEntity
 │       │   └── repositories/
 │       │       └── stopwatch_repository_impl.dart
 │       ├── domain/
 │       │   ├── entities/
 │       │   │   ├── stopwatch_customization.dart
 │       │   │   ├── stopwatch_lap.dart
-│       │   │   └── stopwatch_session.dart
+│       │   │   └── stopwatch_session.dart   # With lastStartTime for pause/resume
 │       │   ├── repositories/
 │       │   │   └── stopwatch_repository.dart
 │       │   └── usecases/
@@ -77,6 +85,8 @@ lib/
 │           │   └── stopwatch_state.dart
 │           ├── pages/
 │           │   └── stopwatch_page.dart
+│           ├── routes/
+│           │   └── stopwatch_routes.dart   # Feature's GoRoute + BlocProvider injection
 │           └── widgets/
 │               ├── stopwatch_controls.dart
 │               └── stopwatch_lap_list.dart
@@ -91,7 +101,8 @@ test/
 3. `core/data/local/app_database.dart` only contains the shared `AppDatabase` abstraction and cross-feature entity imports via **package: imports** (required for `floor_generator` to discover entities).
 4. **State Management:** `flutter_bloc` with `Equatable` states.
 5. **DI:** `get_it` for manual singleton registrations.
-6. **Navigation:** `go_router` with `ShellRoute` for bottom tabs (Alarm, Stopwatch, Customization).
+6. **Navigation:** `go_router` with `ShellRoute`. `core/navigation/` owns router config, shell, and tab enum. Feature routes live in `features/<name>/presentation/routes/`.
+   - `BlocProvider` injection is owned by the feature's route file.
 7. **Database:** SQLite via `floor` ORM. `AppDatabase` is built in `configureDependencies()`.
 8. **Domain entities:** Pure Dart. Floor entities: storage only. They are separate and owned by features.
 9. **Result type:** Monadic `Result<T, E>` used at all repository boundaries.
