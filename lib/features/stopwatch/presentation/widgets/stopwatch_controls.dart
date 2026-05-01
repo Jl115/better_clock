@@ -1,19 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../../../core/theme/catppuccin_colors.dart';
+import '../bloc/stopwatch_bloc.dart';
+import '../bloc/stopwatch_event.dart';
 
 class StopwatchControls extends StatelessWidget {
   final bool isRunning;
-  final VoidCallback onStart;
-  final VoidCallback onStop;
-  final VoidCallback onReset;
-  final VoidCallback onLap;
 
   const StopwatchControls({
     super.key,
     required this.isRunning,
-    required this.onStart,
-    required this.onStop,
-    required this.onReset,
-    required this.onLap,
   });
 
   @override
@@ -25,18 +22,26 @@ class StopwatchControls extends StatelessWidget {
         children: [
           _ControlButton(
             label: 'Reset',
-            color: Colors.grey,
-            onPressed: onReset,
+            backgroundColor: CatppuccinMocha.surface2,
+            foregroundColor: CatppuccinMocha.text,
+            onPressed: () =>
+                context.read<StopwatchBloc>().add(const ResetStopwatch()),
           ),
           _ControlButton(
             label: isRunning ? 'Stop' : 'Start',
-            color: isRunning ? Colors.red : Colors.green,
-            onPressed: isRunning ? onStop : onStart,
+            backgroundColor:
+                isRunning ? CatppuccinMocha.red : CatppuccinMocha.green,
+            foregroundColor: CatppuccinMocha.crust,
+            onPressed: () => isRunning
+                ? context.read<StopwatchBloc>().add(const StopStopwatch())
+                : context.read<StopwatchBloc>().add(const StartStopwatch()),
           ),
           _ControlButton(
             label: 'Lap',
-            color: Colors.indigo,
-            onPressed: onLap,
+            backgroundColor: CatppuccinMocha.blue,
+            foregroundColor: CatppuccinMocha.crust,
+            onPressed: () =>
+                context.read<StopwatchBloc>().add(const LapStopwatch()),
           ),
         ],
       ),
@@ -46,12 +51,14 @@ class StopwatchControls extends StatelessWidget {
 
 class _ControlButton extends StatelessWidget {
   final String label;
-  final Color color;
+  final Color backgroundColor;
+  final Color foregroundColor;
   final VoidCallback onPressed;
 
   const _ControlButton({
     required this.label,
-    required this.color,
+    required this.backgroundColor,
+    required this.foregroundColor,
     required this.onPressed,
   });
 
@@ -60,9 +67,10 @@ class _ControlButton extends StatelessWidget {
     return ElevatedButton(
       onPressed: onPressed,
       style: ElevatedButton.styleFrom(
-        backgroundColor: color,
-        foregroundColor: Colors.white,
+        backgroundColor: backgroundColor,
+        foregroundColor: foregroundColor,
         minimumSize: const Size(90, 50),
+        elevation: 0,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
         ),

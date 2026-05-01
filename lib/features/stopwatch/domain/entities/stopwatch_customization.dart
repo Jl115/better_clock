@@ -14,8 +14,8 @@ class StopwatchCustomization {
     this.digitFontSize = 64.0,
     this.showLapList = true,
     this.lapListPosition = 'bottom',
-    this.digitColorHex = 0xFFFFFFFF,
-    this.accentColorHex = 0xFF9C27B0,
+    this.digitColorHex = 0xFFCDD6F4, // Catppuccin Mocha Text
+    this.accentColorHex = 0xFFB4BEFE, // Catppuccin Mocha Lavender
     this.showMilliseconds = true,
   });
 
@@ -33,8 +33,8 @@ class StopwatchCustomization {
       digitFontSize: (json['digitFontSize'] as num?)?.toDouble() ?? 64.0,
       showLapList: json['showLapList'] as bool? ?? true,
       lapListPosition: json['lapListPosition'] as String? ?? 'bottom',
-      digitColorHex: json['digitColorHex'] as int? ?? 0xFFFFFFFF,
-      accentColorHex: json['accentColorHex'] as int? ?? 0xFF9C27B0,
+      digitColorHex: json['digitColorHex'] as int? ?? 0xFFCDD6F4,
+      accentColorHex: json['accentColorHex'] as int? ?? 0xFFB4BEFE,
       showMilliseconds: json['showMilliseconds'] as bool? ?? true,
     );
   }

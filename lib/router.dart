@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 import 'core/di/injection.dart';
+import 'core/theme/catppuccin_colors.dart';
 import 'features/alarm/presentation/pages/alarm_list_page.dart';
 import 'features/stopwatch/presentation/bloc/stopwatch_bloc.dart';
 import 'features/stopwatch/presentation/pages/stopwatch_page.dart';
@@ -87,14 +88,28 @@ class ScaffoldWithNavBar extends StatelessWidget {
 
     return Scaffold(
       body: child,
-      bottomNavigationBar: NavigationBar(
-        selectedIndex: getCurrentIndex(),
-        onDestinationSelected: onItemTapped,
-        destinations: const [
-          NavigationDestination(icon: Icon(Icons.alarm), label: 'Alarm'),
-          NavigationDestination(icon: Icon(Icons.timer), label: 'Stopwatch'),
-          NavigationDestination(icon: Icon(Icons.settings), label: 'Settings'),
-        ],
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+          color: CatppuccinMocha.mantle,
+          boxShadow: [
+            BoxShadow(
+              color: CatppuccinMocha.crust.withValues(alpha: 0.6),
+              blurRadius: 8,
+              offset: const Offset(0, -2),
+            ),
+          ],
+        ),
+        child: NavigationBar(
+          selectedIndex: getCurrentIndex(),
+          onDestinationSelected: onItemTapped,
+          backgroundColor: CatppuccinMocha.mantle,
+          indicatorColor: CatppuccinMocha.surface0,
+          destinations: const [
+            NavigationDestination(icon: Icon(Icons.alarm), label: 'Alarm'),
+            NavigationDestination(icon: Icon(Icons.timer), label: 'Stopwatch'),
+            NavigationDestination(icon: Icon(Icons.settings), label: 'Settings'),
+          ],
+        ),
       ),
     );
   }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../core/theme/catppuccin_colors.dart';
 import '../../domain/entities/stopwatch_lap.dart';
 
 class StopwatchLapList extends StatelessWidget {
@@ -11,7 +12,12 @@ class StopwatchLapList extends StatelessWidget {
   Widget build(BuildContext context) {
     if (laps.isEmpty) {
       return const Expanded(
-        child: Center(child: Text('No laps recorded', style: TextStyle(color: Colors.grey))),
+        child: Center(
+          child: Text(
+            'No laps recorded',
+            style: TextStyle(color: CatppuccinMocha.overlay0),
+          ),
+        ),
       );
     }
 
@@ -22,7 +28,10 @@ class StopwatchLapList extends StatelessWidget {
         reverse: false,
         padding: const EdgeInsets.symmetric(horizontal: 16),
         itemCount: reversed.length,
-        separatorBuilder: (context, index) => const Divider(height: 1, color: Colors.white12),
+        separatorBuilder: (context, index) => const Divider(
+          height: 1,
+          color: CatppuccinMocha.surface1,
+        ),
         itemBuilder: (context, index) {
           final lap = reversed[index];
           return _LapRow(
@@ -49,11 +58,17 @@ class _LapRow extends StatelessWidget {
 
   String _fmt(Duration d) {
     final totalMs = d.inMilliseconds;
-    final minutes = (totalMs ~/ Duration.millisecondsPerMinute).toString().padLeft(2, '0');
-    final seconds = ((totalMs % Duration.millisecondsPerMinute) ~/ Duration.millisecondsPerSecond)
-        .toString()
-        .padLeft(2, '0');
-    final hundredths = ((totalMs % Duration.millisecondsPerSecond) ~/ 10).toString().padLeft(2, '0');
+    final minutes =
+        (totalMs ~/ Duration.millisecondsPerMinute).toString().padLeft(2, '0');
+    final seconds =
+        ((totalMs % Duration.millisecondsPerMinute) ~/
+                Duration.millisecondsPerSecond)
+            .toString()
+            .padLeft(2, '0');
+    final hundredths =
+        ((totalMs % Duration.millisecondsPerSecond) ~/ 10)
+            .toString()
+            .padLeft(2, '0');
     return '$minutes:$seconds.$hundredths';
   }
 
@@ -67,21 +82,27 @@ class _LapRow extends StatelessWidget {
             width: 40,
             child: Text(
               '#$lapNumber',
-              style: const TextStyle(fontSize: 16, color: Colors.grey),
+              style: const TextStyle(
+                fontSize: 16,
+                color: CatppuccinMocha.overlay0,
+              ),
             ),
           ),
           Expanded(
             child: Text(
               _fmt(lapDuration),
-              style: const TextStyle(fontSize: 16, color: Colors.white),
+              style: const TextStyle(
+                fontSize: 16,
+                color: CatppuccinMocha.text,
+              ),
               textAlign: TextAlign.center,
             ),
           ),
           Text(
             _fmt(totalDuration),
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 16,
-              color: Colors.grey[400],
+              color: CatppuccinMocha.subtext0,
             ),
           ),
         ],
