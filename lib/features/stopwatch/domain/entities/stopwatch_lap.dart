@@ -44,8 +44,9 @@ class StopwatchLap {
           sessionId == other.sessionId &&
           lapNumber == other.lapNumber &&
           lapDuration == other.lapDuration &&
-          totalDuration == other.totalDuration;
+          totalDuration == other.totalDuration &&
+          createdAt == other.createdAt;
 
   @override
-  int get hashCode => Object.hash(id, sessionId, lapNumber, lapDuration, totalDuration);
+  int get hashCode => Object.hash(id, sessionId, lapNumber, lapDuration, totalDuration, createdAt);
 }

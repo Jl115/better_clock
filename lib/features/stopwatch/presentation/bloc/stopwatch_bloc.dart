@@ -145,7 +145,7 @@ class StopwatchBloc extends Bloc<StopwatchEvent, StopwatchState> {
 
   void _onLap(LapStopwatch event, Emitter<StopwatchState> emit) async {
     final session = state.session;
-    if (session == null || session.id == null) return;
+    if (session == null || session.id == null || !session.isRunning) return;
 
     final now = DateTime.now();
     final currentTotal = _computeCurrentTotal(session);

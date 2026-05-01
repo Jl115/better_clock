@@ -42,6 +42,7 @@ class StopwatchState extends Equatable {
   List<Object?> get props => [
         isRunning,
         session,
+        session?.laps.length,
         currentTotalDuration,
         customization,
         isLoading,

@@ -36,7 +36,7 @@ class StopwatchSession {
       totalDuration: totalDuration ?? this.totalDuration,
       isRunning: isRunning ?? this.isRunning,
       elapsedBeforePause: elapsedBeforePause ?? this.elapsedBeforePause,
-      lastStartTime: lastStartTime,
+      lastStartTime: lastStartTime ?? this.lastStartTime,
       laps: laps ?? this.laps,
     );
   }
@@ -50,8 +50,10 @@ class StopwatchSession {
           totalDuration == other.totalDuration &&
           isRunning == other.isRunning &&
           elapsedBeforePause == other.elapsedBeforePause &&
-          lastStartTime == other.lastStartTime;
+          lastStartTime == other.lastStartTime &&
+          laps == other.laps;
 
   @override
-  int get hashCode => Object.hash(id, totalDuration, isRunning, elapsedBeforePause, lastStartTime);
+  int get hashCode =>
+      Object.hash(id, totalDuration, isRunning, elapsedBeforePause, lastStartTime, laps);
 }
