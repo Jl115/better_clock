@@ -34,8 +34,8 @@ A modern, highly customizable clone of the iOS Clock app built with Flutter.
 - [x] **UI**: `StopwatchControls` widget.
 - [x] **UI**: `StopwatchLapList` widget with lap number, lap duration, running total.
 - [x] DI fully wired for Stopwatch and Customization modules.
-- [x] `flutter analyze` — 0 errors.
-- [x] `flutter build macos --debug` — success.
+- [x] `fvm flutter analyze` — 0 errors.
+- [x] `fvm flutter build macos --debug` — success.
 
 ## Remaining Phases
 
@@ -78,8 +78,8 @@ A modern, highly customizable clone of the iOS Clock app built with Flutter.
 10. **Platforms:** Android, iOS, macOS.
 
 ## Build Verification
-- **Current status**: `flutter analyze` — 0 errors.
-- **Native build**: macOS debug build succeeds.
+- **Current status**: `fvm flutter analyze` — 0 errors.
+- **Native build**: `fvm flutter build macos --debug` succeeds.
 - **Known warnings**: 3rd-party `audioplayers` Sendable warnings (no action needed).
 
 ## To Update
