@@ -1,6 +1,6 @@
 import 'package:floor/floor.dart';
 
-import '../entities/stopwatch_entity.dart';
+import '../models/stopwatch_entity.dart';
 
 @dao
 abstract class StopwatchDao {

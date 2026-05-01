@@ -16,31 +16,36 @@ lib/
 ├── core/
 │   ├── di/
 │   │   └── injection.dart              # get_it registrations for services, DB, repos, usecases
-│   ├── database/
-│   │   ├── app_database.dart           # Floor abstract DB
-│   │   ├── app_database.g.dart        # Generated Floor code
-│   │   ├── dao/
-│   │   │   ├── alarm_dao.dart
-│   │   │   ├── customization_dao.dart
-│   │   │   └── stopwatch_dao.dart
-│   │   └── entities/
-│   │       ├── alarm_entity.dart
-│   │       ├── customization_entity.dart
-│   │       └── stopwatch_entity.dart   # StopwatchSessionEntity, LapEntity
+│   ├── data/
+│   │   └── local/
+│   │       ├── app_database.dart     # Floor abstract DB (uses package: imports for cross-feature)
+│   │       └── app_database.g.dart   # Generated Floor code
 │   ├── services/
 │   │   ├── audio_service.dart         # Placeholder for audioplayers
-│   │   ├── notification_service.dart # Placeholder for flutter_local_notifications
-│   │   ├── permission_service.dart    # Permission handler wrapper
+│   │   ├── notification_service.dart  # Placeholder for flutter_local_notifications
+│   │   ├── permission_service.tsx    # Permission handler wrapper
 │   │   └── time_ticker_service.dart   # Broadcasts DateTime every 10ms
+│   ├── theme/
+│   │   ├── catppuccin_colors.dart    # Catppuccin Mocha + Latte palette constants
+│   │   └── app_theme.dart             # ThemeData builder for Mocha
 │   └── utils/
 │       └── result.dart                # Monadic Result<T,E>, AppError hierarchy, DurationFormatting
 ├── features/
 │   ├── alarm/
+│   │   ├── data/
+│   │   │   ├── dao/
+│   │   │   │   └── alarm_dao.dart    # Floor DAO for AlarmEntity
+│   │   │   └── models/
+│   │   │       └── alarm_entity.dart  # Floor entity for alarms
 │   │   └── presentation/
 │   │       └── pages/
-│   │           └── alarm_list_page.dart  # Placeholder
+│   │           └── alarm_list_page.dart
 │   ├── customization/
 │   │   ├── data/
+│   │   │   ├── dao/
+│   │   │   │   └── customization_dao.dart
+│   │   │   ├── models/
+│   │   │   │   └── customization_entity.dart
 │   │   │   └── repositories/
 │   │   │       └── customization_repository_impl.dart
 │   │   ├── domain/
@@ -55,8 +60,12 @@ lib/
 │   │           └── customization_page.dart
 │   └── stopwatch/
 │       ├── data/
+│       │   ├── dao/
+│       │   │   └── stopwatch_dao.dart
 │       │   ├── datasources/
 │       │   │   └── stopwatch_local_datasource.dart  # Wraps Floor DAO
+│       │   ├── models/
+│       │   │   └── stopwatch_entity.dart  # StopwatchSessionEntity, LapEntity
 │       │   └── repositories/
 │       │       └── stopwatch_repository_impl.dart   # Mapper+CRUD
 │       ├── domain/
@@ -85,11 +94,14 @@ test/
 ## Key Modules & Responsibilities
 
 - **`core/services/`** — Cross-cutting singletons: TimeTicker, Audio, Notifications, Permissions.
-- **`core/database/`** — Floor SQLite ORM: entities, DAOs, generated code. Owned by `configureDependencies()`.
+- **`core/data/local/`** — Shared local DB abstraction: `AppDatabase`, `app_database.g.dart`. **Does not contain feature entities or DAOs.**
 - **`core/di/`** — The single source of truth for `get_it` registrations.
+- **`core/theme/`** — Catppuccin Mocha/Latte color palettes and Mocha ThemeData builder.
 - **`core/utils/`** — Domain-agnostic utilities (Result, error sealed classes, Duration formatting, DateTime extensions).
+- **`features/<feature>/data/models/`** — Floor entities (DB tables) owned by the feature.
+- **`features/<feature>/data/dao/`** — Floor DAOs owned by the feature.
+- **`features/<feature>/data/repositories/`** — Repository implementations that map between Floor entities and domain models.
 - **`features/<feature>/domain/`** — Immutable entities, repository interfaces (abstract), usecase classes.
-- **`features/<feature>/data/`** — Data sources wrapping DAOs, repository implementations mapping entities ↔ domain.
 - **`features/<feature>/presentation/`** — BLoC (state sealed class extends Equatable, event sealed class), pages, widgets.
 
 ## Data Flow
@@ -99,6 +111,11 @@ UI (Page) → Bloc (State/Event) → Usecase → Repository Interface → Reposi
                                               ↓
                                            Result<T, E> wrapper prevents exceptions crossing boundaries
 ```
+
+### Database Layer (IMPORTANT)
+- Floor entities and DAOs are **feature-owned** (`features/<feature>/data/models/` and `features/<feature>/data/dao/`).
+- `core/data/local/app_database.dart` is the **shared abstraction** that imports all feature entities via **package: imports** (so `floor_generator` can discover them).
+- `AppDatabase` must import entities as `package:better_clock/features/<feature>/data/models/<entity>.dart`, not relative paths.
 
 ### Navigation
 - `go_router` with `ShellRoute` provides bottom tab navigation (Alarm, Stopwatch, Customization).
@@ -116,7 +133,7 @@ UI (Page) → Bloc (State/Event) → Usecase → Repository Interface → Reposi
 
 ## How to Navigate
 
-- Need to add a new feature? Create `features/<name>/domain/`, `data/`, `presentation/`.
+- Need to add a new feature? Create `features/<name>/domain/`, `data/models/`, `data/dao/`, `data/repositories/`, `presentation/`.
 - Need to add a new service? Add to `core/services/` and register in `core/di/injection.dart`.
-- Need to add a new DB entity? Add to `core/database/entities/`, create DAO in `core/database/dao/`, register in `app_database.dart`, run `build_runner`.
+- Need to add a new DB entity? Add to `features/<name>/data/models/`, create DAO in `features/<name>/data/dao/`, import in `core/data/local/app_database.dart` via **package: import**, run `build_runner`.
 - All imports should follow the AGENTS.md convention (`package:better_clock/...` or verified relative).

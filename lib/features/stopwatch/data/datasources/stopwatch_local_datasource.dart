@@ -1,5 +1,5 @@
-import '../../../../core/database/app_database.dart';
-import '../../../../core/database/entities/stopwatch_entity.dart';
+import '../../../../core/data/local/app_database.dart';
+import '../models/stopwatch_entity.dart';
 
 /// Local datasource for stopwatch data, wrapping the Floor DAO.
 class StopwatchLocalDataSource {

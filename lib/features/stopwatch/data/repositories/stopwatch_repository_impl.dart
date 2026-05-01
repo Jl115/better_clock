@@ -1,5 +1,6 @@
 import '../../../../core/utils/result.dart';
-import '../../../../core/database/entities/stopwatch_entity.dart';
+import '../models/stopwatch_entity.dart';
+
 import '../../domain/entities/stopwatch_lap.dart';
 import '../../domain/entities/stopwatch_session.dart';
 import '../../domain/repositories/stopwatch_repository.dart';
@@ -9,14 +10,19 @@ class StopwatchRepositoryImpl implements IStopwatchRepository {
   final StopwatchLocalDataSource _dataSource;
   const StopwatchRepositoryImpl(this._dataSource);
 
-  StopwatchSession _mapEntityToDomain(StopwatchSessionEntity e, List<StopwatchLap> laps) {
+  StopwatchSession _mapEntityToDomain(
+    StopwatchSessionEntity e,
+    List<StopwatchLap> laps,
+  ) {
     return StopwatchSession(
       id: e.id,
       createdAt: DateTime.parse(e.createdAtIso),
       totalDuration: Duration(milliseconds: e.totalDurationMs),
       isRunning: e.isRunning,
       elapsedBeforePause: Duration(milliseconds: e.elapsedBeforePauseMs),
-      lastStartTime: e.lastStartTimeIso != null ? DateTime.parse(e.lastStartTimeIso!) : null,
+      lastStartTime: e.lastStartTimeIso != null
+          ? DateTime.parse(e.lastStartTimeIso!)
+          : null,
       laps: laps,
     );
   }
@@ -138,7 +144,9 @@ class StopwatchRepositoryImpl implements IStopwatchRepository {
   }
 
   @override
-  Future<Result<List<StopwatchLap>, AppError>> getLapsBySessionId(int sessionId) async {
+  Future<Result<List<StopwatchLap>, AppError>> getLapsBySessionId(
+    int sessionId,
+  ) async {
     try {
       final laps = await _loadLaps(sessionId);
       return Success(laps);

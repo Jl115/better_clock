@@ -33,6 +33,27 @@ Read `.opencode/skills/better_clock-architecture/SKILL.md` **BEFORE** creating f
 
 Do not guess directory structures. If you are unsure, consult the `better_clock-architecture` skill.
 
+## Response Behavior: Decision Support (Mandatory)
+
+**This rule applies to every request for a change, feature, or direction.**
+
+Whenever the user asks for anything that requires code changes, implementation, or architectural decisions, **YOU MUST** present **3 distinct plans** before proceeding. This includes bug fixes, refactors, new features, UI changes, dependency additions, and any other modification.
+
+For each request, provide:
+
+- **Plan A** — The fastest path to value. Minimal scope, quick wins, may have technical debt.
+- **Plan B** — Balanced approach. Solid foundation, some polish, moderate effort.
+- **Plan C** — The "ideal" build. Full correctness, extensibility, and quality. Highest effort.
+
+For each plan, explicitly list:
+1. **Pros**
+2. **Cons**
+3. **Estimated effort** (S / M / L / XL)
+
+After all three, add a **Recommendation** section that picks one plan and justifies why. Use the pick order: **B → A → C** unless technical constraints or user context strongly favor another.
+
+**Do not start implementation until the user picks a plan.** If the user says "just do it", "go ahead", or selects a plan, default to the Recommended plan.
+
 ## Commands (Always Run Before Commit)
 
 1. `fvm flutter pub get` — after any `pubspec.yaml` change.

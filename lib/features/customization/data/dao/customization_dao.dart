@@ -1,6 +1,6 @@
 import 'package:floor/floor.dart';
 
-import '../entities/customization_entity.dart';
+import '../models/customization_entity.dart';
 
 @dao
 abstract class CustomizationDao {

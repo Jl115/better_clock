@@ -1,7 +1,8 @@
 import 'dart:convert';
 
-import '../../../../core/database/app_database.dart';
-import '../../../../core/database/entities/customization_entity.dart';
+import '../../../../core/data/local/app_database.dart';
+import '../models/customization_entity.dart';
+
 import '../../../../core/utils/result.dart';
 import '../../../stopwatch/domain/entities/stopwatch_customization.dart';
 import '../../domain/repositories/customization_repository.dart';

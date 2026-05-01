@@ -4,7 +4,8 @@ import '../services/audio_service.dart';
 import '../services/notification_service.dart';
 import '../services/permission_service.dart';
 import '../services/time_ticker_service.dart';
-import '../database/app_database.dart';
+import '../data/local/app_database.dart';
+
 import '../../features/stopwatch/data/datasources/stopwatch_local_datasource.dart';
 import '../../features/stopwatch/data/repositories/stopwatch_repository_impl.dart';
 import '../../features/stopwatch/domain/repositories/stopwatch_repository.dart';

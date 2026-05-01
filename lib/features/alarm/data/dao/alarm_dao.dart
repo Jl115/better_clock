@@ -1,6 +1,6 @@
 import 'package:floor/floor.dart';
 
-import '../entities/alarm_entity.dart';
+import '../models/alarm_entity.dart';
 
 @dao
 abstract class AlarmDao {

@@ -102,7 +102,7 @@ class _$AppDatabase extends AppDatabase {
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `alarms` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `hour` INTEGER NOT NULL, `minute` INTEGER NOT NULL, `repeatDaysJson` TEXT NOT NULL, `label` TEXT NOT NULL, `isEnabled` INTEGER NOT NULL, `soundUri` TEXT, `volume` REAL NOT NULL, `vibrate` INTEGER NOT NULL, `snoozeMinutes` INTEGER NOT NULL)');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `stopwatch_sessions` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `createdAtIso` TEXT NOT NULL, `totalDurationMs` INTEGER NOT NULL, `isRunning` INTEGER NOT NULL, `elapsedBeforePauseMs` INTEGER NOT NULL)');
+            'CREATE TABLE IF NOT EXISTS `stopwatch_sessions` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `createdAtIso` TEXT NOT NULL, `totalDurationMs` INTEGER NOT NULL, `isRunning` INTEGER NOT NULL, `elapsedBeforePauseMs` INTEGER NOT NULL, `lastStartTimeIso` TEXT)');
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `laps` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `sessionId` INTEGER NOT NULL, `lapNumber` INTEGER NOT NULL, `lapDurationMs` INTEGER NOT NULL, `totalDurationMs` INTEGER NOT NULL, `createdAtIso` TEXT NOT NULL, FOREIGN KEY (`sessionId`) REFERENCES `stopwatch_sessions` (`id`) ON UPDATE NO ACTION ON DELETE CASCADE)');
         await database.execute(
@@ -282,7 +282,8 @@ class _$StopwatchDao extends StopwatchDao {
                   'createdAtIso': item.createdAtIso,
                   'totalDurationMs': item.totalDurationMs,
                   'isRunning': item.isRunning ? 1 : 0,
-                  'elapsedBeforePauseMs': item.elapsedBeforePauseMs
+                  'elapsedBeforePauseMs': item.elapsedBeforePauseMs,
+                  'lastStartTimeIso': item.lastStartTimeIso
                 }),
         _lapEntityInsertionAdapter = InsertionAdapter(
             database,
@@ -304,7 +305,8 @@ class _$StopwatchDao extends StopwatchDao {
                   'createdAtIso': item.createdAtIso,
                   'totalDurationMs': item.totalDurationMs,
                   'isRunning': item.isRunning ? 1 : 0,
-                  'elapsedBeforePauseMs': item.elapsedBeforePauseMs
+                  'elapsedBeforePauseMs': item.elapsedBeforePauseMs,
+                  'lastStartTimeIso': item.lastStartTimeIso
                 }),
         _stopwatchSessionEntityDeletionAdapter = DeletionAdapter(
             database,
@@ -315,7 +317,8 @@ class _$StopwatchDao extends StopwatchDao {
                   'createdAtIso': item.createdAtIso,
                   'totalDurationMs': item.totalDurationMs,
                   'isRunning': item.isRunning ? 1 : 0,
-                  'elapsedBeforePauseMs': item.elapsedBeforePauseMs
+                  'elapsedBeforePauseMs': item.elapsedBeforePauseMs,
+                  'lastStartTimeIso': item.lastStartTimeIso
                 });
 
   final sqflite.DatabaseExecutor database;
@@ -344,7 +347,8 @@ class _$StopwatchDao extends StopwatchDao {
             createdAtIso: row['createdAtIso'] as String,
             totalDurationMs: row['totalDurationMs'] as int,
             isRunning: (row['isRunning'] as int) != 0,
-            elapsedBeforePauseMs: row['elapsedBeforePauseMs'] as int));
+            elapsedBeforePauseMs: row['elapsedBeforePauseMs'] as int,
+            lastStartTimeIso: row['lastStartTimeIso'] as String?));
   }
 
   @override
@@ -355,7 +359,8 @@ class _$StopwatchDao extends StopwatchDao {
             createdAtIso: row['createdAtIso'] as String,
             totalDurationMs: row['totalDurationMs'] as int,
             isRunning: (row['isRunning'] as int) != 0,
-            elapsedBeforePauseMs: row['elapsedBeforePauseMs'] as int),
+            elapsedBeforePauseMs: row['elapsedBeforePauseMs'] as int,
+            lastStartTimeIso: row['lastStartTimeIso'] as String?),
         arguments: [id]);
   }
 
